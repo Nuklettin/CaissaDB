@@ -4,10 +4,10 @@ import psycopg2
 from movie import Movie
 import views
 
-conn = psycopg2.connect("dbname=postgres user=postgres password=postgres")
-cur = conn.cursor()
-cur.execute("SELECT * FROM player")
-records = cur.fetchall()
+#conn = psycopg2.connect("dbname=postgres user=postgres password=postgres")
+#cur = conn.cursor()
+#cur.execute("SELECT * FROM player")
+#records = cur.fetchall()
 
 
 def create_app():
