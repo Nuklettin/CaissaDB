@@ -11,23 +11,18 @@ import views
 
 app = Flask(__name__)
 
+
 def create_app():
     app.config.from_object("config")
-
-    @app.route('/')
-    def homepage():
-        today = datetime.today()
-        day_name = today.strftime("%A")
-        return render_template("home.html", day=day_name)
-    #app.add_url_rule("/", view_func=views.home_page)
-   # app.add_url_rule("/leaderboard", view_func=views.leaderboard_page, methods=["GET", "POST"])
-  #  app.add_url_rule("/matches", view_func=views.matches_page)
- #  app.add_url_rule("/profile", view_func=views.profile_page, methods=["GET", "POST"])
-  #  app.add_url_rule(
-   #    "/profile/<int:movie_key>/edit",
-  #      view_func=views.movie_edit_page,
-   #     methods=["GET", "POST"],
- #   )
+    app.add_url_rule('/', view_func=views.home_page)
+    app.add_url_rule("/leaderboard", view_func=views.leaderboard_page, methods=["GET", "POST"])
+    app.add_url_rule("/matches", view_func=views.matches_page)
+    app.add_url_rule("/profile", view_func=views.profile_page, methods=["GET", "POST"])
+    app.add_url_rule(
+        "/profile/<int:movie_key>/edit",
+        view_func=views.movie_edit_page,
+        methods=["GET", "POST"],
+    )
 
     return app
 
