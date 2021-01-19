@@ -1,5 +1,5 @@
 import os
-from urllib.parse import urlparse
+import urllib.parse as urlparse
 import psycopg2
 from flask import flash
 from passlib.hash import pbkdf2_sha256 as hasher
