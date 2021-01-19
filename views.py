@@ -1,4 +1,4 @@
-from flask import Flask, render_template, current_app, abort, request, url_for, redirect, flash,session
+from flask import Flask, render_template, current_app, abort, request, url_for, redirect, flash
 from datetime import datetime
 from database import Database
 from wtforms import StringField, PasswordField
