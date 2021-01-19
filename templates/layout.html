@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
@@ -27,47 +27,59 @@
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
-      <script src="{{url_for('static', filename = 'js/html5shiv.js')}}"></script>
-      <script src="{{url_for('static', filename = 'js/respond.min.js')}}"></script>
+    <script src="{{url_for('static', filename = 'js/html5shiv.js')}}"></script>
+    <script src="{{url_for('static', filename = 'js/respond.min.js')}}"></script>
     <![endif]-->
-  </head>
+</head>
 
-  <body data-spy="scroll" data-offset="0" data-target="#theMenu" style="background-color: #111111">
+<body data-spy="scroll" data-offset="0" data-target="#theMenu" style="background-color: #111111">
 
-	<!-- Menu -->
-	<nav class="menu" id="theMenu">
-		<div class="menu-wrap">
-			<h1 class="logo"><a href="{{url_for('home_page')}}">Caissa</a></h1>
-			<i class="icon-remove menu-close"></i>
-			<a href="{{url_for('home_page')}}" class="smoothScroll">Home</a>
-			<a href="{{url_for('profile_page')}}" class="smoothScroll">Profile</a>
-			<a href="{{url_for('leaderboard_page')}}" class="smoothScroll">Leaderboard</a>
-			<a href="{{url_for('matches_page')}}" class="smoothScroll">Matches</a>
-			<a href="#"><i class="icon-facebook"></i></a>
-			<a href="#"><i class="icon-twitter"></i></a>
-			<a href="#"><i class="icon-dribbble"></i></a>
-			<a href="#"><i class="icon-envelope"></i></a>
-		</div>
+<!-- Menu -->
+<nav class="menu" id="theMenu">
+    <div class="menu-wrap">
+        <h1 class="logo"><a href="{{url_for('home_page')}}">Caissa</a></h1>
+        <i class="icon-remove menu-close"></i>
+        <a href="{{url_for('home_page')}}" class="smoothScroll">Home</a>
+        <a href="{{url_for('profile_page')}}" class="smoothScroll">Profile</a>
+        <a href="{{url_for('leaderboard_page')}}" class="smoothScroll">Leaderboard</a>
+        <a href="{{url_for('matches_page')}}" class="smoothScroll">Matches</a>
+        {% if not current_user.is_authenticated %}
+        <a href="{{url_for('signup_page')}}" class="smoothScroll">Sign Up</a>
+        <a href="{{url_for('login_page')}}" class="smoothScroll">Log In</a>
+        {% else %}
+        <p style="color:white">{{ current_user.username }}</p>
+        <a href="{{url_for('logout_page')}}" class="smoothScroll">Log Out</a>
+        {% endif %}
+        {% if current_user.is_admin %}
+        <a href="{{url_for('admin_page')}}" class="smoothScroll">Admin Panel</a>
+        {% endif %}
+        <a href="#"><i class="icon-facebook"></i></a>
+        <a href="#"><i class="icon-twitter"></i></a>
+        <a href="#"><i class="icon-dribbble"></i></a>
+        <a href="#"><i class="icon-envelope"></i></a>
 
-		<!-- Menu button -->
-		<div id="menuToggle"><i class="icon-reorder"></i></div>
-	</nav>
+    </div>
+
+    <!-- Menu button -->
+    <div id="menuToggle"><i class="icon-reorder"></i></div>
+</nav>
 
 <div id="headerwrap">
-		<div class="logo">
-			<img src="{{url_for('static', filename = 'img/CaissaW.png')}}" height="100px" width="100px" align="left">
-		</div>
+    <div class="row">
+        <div class ="column" style="width: 120px; padding-left: 20px"><img src="{{url_for('static', filename = 'img/CaissaW.png')}}" height="100px" width="100px"  align="left"> </div>
+        <div class ="column"><p style="font-family: 'Oswald', sans-serif; font-size: 75px; color: white; padding-top: 30px;"  align="left">CAISSA</p></div>
+    </div>
 </div><!-- /headerwrap -->
 
 
-    {% block content %} {% endblock %}
+{% block content %} {% endblock %}
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-	<script src="{{url_for('static', filename = 'js/main.js')}}"></script>
-	<script src="{{url_for('static', filename = 'js/smoothscroll.js')}}"></script>
-	<script src="{{url_for('static', filename = 'js/bootstrap.min.js')}}"></script>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="{{url_for('static', filename = 'js/main.js')}}"></script>
+<script src="{{url_for('static', filename = 'js/smoothscroll.js')}}"></script>
+<script src="{{url_for('static', filename = 'js/bootstrap.min.js')}}"></script>
 </body>
 </html>
 

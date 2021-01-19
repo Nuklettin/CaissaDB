@@ -1,4 +1,4 @@
-class Movie:
-    def __init__(self, title, year=None):
-        self.title = title
-        self.year = year
+class Player:
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password

@@ -1,6 +1,18 @@
-from flask import Flask, render_template, current_app, abort, request, url_for, redirect
+from flask import Flask, render_template, current_app, abort, request, url_for, redirect, flash,session
 from datetime import datetime
-from movie import Movie
+from database import Database
+from wtforms import StringField, PasswordField
+from flask_wtf import FlaskForm
+from flask_wtf.file import DataRequired
+from passlib.hash import pbkdf2_sha256 as hasher
+from flask_login import login_user, logout_user
+from player import get_user
+from movie import Player
+
+
+class LoginForm(FlaskForm):
+    username = StringField("Username", validators=[DataRequired()])
+    password = PasswordField("Password", validators=[DataRequired()])
 
 
 def home_page():
@@ -10,76 +22,77 @@ def home_page():
 
 
 def leaderboard_page():
-    db = current_app.config["db"]
     if request.method == "GET":
-        return render_template("movies.html")
+        return render_template("play.html")
     else:
-        form_movie_keys = request.form.getlist("movie_keys")
-        for form_movie_key in form_movie_keys:
-            db.delete_movie(int(form_movie_key))
         return redirect(url_for("profile_page"))
 
 
 def matches_page():
-    db = current_app.config["db"]
     return render_template("movie.html")
 
 
+def login_page():
+    form = LoginForm()
+    if form.validate_on_submit():
+        username = form.data["username"]
+        user = get_user(username)
+        if user is not None:
+            password = form.data["password"]
+            if hasher.verify(password, user.password):
+                login_user(user)
+                flash("You have logged in.")
+                next_page = request.args.get("next", url_for("profile_page"))
+                return redirect(next_page)
+        flash("Invalid credentials.")
+    return render_template("login.html", form=form)
+
+
+def logout_page():
+    logout_user()
+    flash("You have logged out.")
+    return redirect(url_for("home_page"))
+
+
 def profile_page():
-    db = current_app.config["db"]
-    return render_template("movies.html")
+    return render_template("play.html")
 
 
-def movie_edit_page(movie_key):
+def signup_page():
     if request.method == "GET":
-        db = current_app.config["db"]
-        movie = db.get_movie(movie_key)
-        if movie is None:
-            abort(404)
-        values = {"title": movie.title, "year": movie.year}
         return render_template(
-            "movie_edit.html",
-            min_year=1887,
-            max_year=datetime.now().year,
-            values=values,
-        )
+            "signup.html")
     else:
-        valid = validate_movie_form(request.form)
+        valid = validate_form(request.form)
         if not valid:
             return render_template(
-                "movie_edit.html",
-                min_year=1887,
-                max_year=datetime.now().year,
-                values=request.form,
+                "signup.html"
             )
-        title = request.form.data["title"]
-        year = request.form.data["year"]
-        movie = Movie(title, year=year)
-        db = current_app.config["db"]
-        db.update_movie(movie_key, movie)
-        return redirect(url_for("profile_page", movie_key=movie_key))
+        username = request.form.data["username"]
+        password = request.form.data["password"]
+        db = Database()
+        value = db.new_player(username, password)
+        if value == 0:
+            return redirect(url_for("signup_page"))
+        else:
+            flash("Sign up successful. You can log in now.")
+            return redirect(url_for("login_page"))
 
 
-def validate_movie_form(form):
+def validate_form(form):
     form.data = {}
     form.errors = {}
 
-    form_title = form.get("title", "").strip()
-    if len(form_title) == 0:
-        form.errors["title"] = "Title can not be blank."
+    form_username = form.get("username", "").strip()
+    if len(form_username) == 0:
+        form.errors["username"] = "Username can not be blank."
     else:
-        form.data["title"] = form_title
+        form.data["username"] = form_username
 
-    form_year = form.get("year")
-    if not form_year:
-        form.data["year"] = None
-    elif not form_year.isdigit():
-        form.errors["year"] = "Year must consist of digits only."
+    form_password = form.get("password", "").strip()
+    if len(form_password) == 0:
+        form.errors["password"] = "Password can not be blank."
     else:
-        year = int(form_year)
-        if (year < 1887) or (year > datetime.now().year):
-            form.errors["year"] = "Year not in valid range."
-        else:
-            form.data["year"] = year
+        form.data["password"] = form_password
 
     return len(form.errors) == 0
