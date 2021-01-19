@@ -2,6 +2,8 @@ from movie import Player
 from flask import flash, render_template, redirect
 from passlib.hash import pbkdf2_sha256 as hasher
 import psycopg2
+import os
+from urllib.parse import urlparse
 
 
 class Database:
@@ -10,7 +12,22 @@ class Database:
 
     def new_player(self, username, password):
         hashedPass = hasher.hash(password)
-        conn = psycopg2.connect("dbname=postgres user=postgres password=postgres")
+
+        url = urlparse.urlparse(os.environ['DATABASE_URL'])
+        dbname = url.path[1:]
+        user = url.username
+        password = url.password
+        host = url.hostname
+        port = url.port
+
+        conn = psycopg2.connect(
+            dbname=dbname,
+            user=user,
+            password=password,
+            host=host,
+            port=port
+        )
+
         cur = conn.cursor()
         query = "SELECT username FROM player WHERE username = '" + username + "';"
         cur.execute(query)
@@ -23,9 +40,21 @@ class Database:
                             INSERT INTO elo (elo_id) SELECT * FROM data;""", (username, hashedPass))
         conn.commit()
 
-
     def play_match(self, white_player, black_player, time_format, pgn):
-        conn = psycopg2.connect("dbname=postgres user=postgres password=postgres")
+        url = urlparse.urlparse(os.environ['DATABASE_URL'])
+        dbname = url.path[1:]
+        user = url.username
+        password = url.password
+        host = url.hostname
+        port = url.port
+
+        conn = psycopg2.connect(
+            dbname=dbname,
+            user=user,
+            password=password,
+            host=host,
+            port=port
+        )
         cur = conn.cursor()
         query = "SELECT title FROM player WHERE username = '" + white_player + "' OR username = '" + black_player + "';"
         cur.execute(query)

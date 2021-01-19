@@ -2,6 +2,8 @@ from flask import current_app
 from flask import flash
 from flask_login import UserMixin
 import psycopg2
+import os
+from urllib.parse import urlparse
 
 
 class User(UserMixin):
@@ -20,7 +22,20 @@ class User(UserMixin):
 
 
 def get_user(user_id):
-    conn = psycopg2.connect("dbname=postgres user=postgres password=postgres")
+    url = urlparse.urlparse(os.environ['DATABASE_URL'])
+    dbname = url.path[1:]
+    user = url.username
+    password = url.password
+    host = url.hostname
+    port = url.port
+
+    conn = psycopg2.connect(
+        dbname=dbname,
+        user=user,
+        password=password,
+        host=host,
+        port=port
+    )
     cur = conn.cursor()
     query = "SELECT password FROM player WHERE username = '" + user_id + "';"
     cur.execute(query)
