@@ -1,9 +1,8 @@
-from movie import Player
-from flask import flash, render_template, redirect
-from passlib.hash import pbkdf2_sha256 as hasher
-import psycopg2
 import os
 from urllib.parse import urlparse
+import psycopg2
+from flask import flash
+from passlib.hash import pbkdf2_sha256 as hasher
 
 
 class Database:
@@ -12,7 +11,6 @@ class Database:
 
     def new_player(self, username, password):
         hashedPass = hasher.hash(password)
-
         url = urlparse.urlparse(os.environ['DATABASE_URL'])
         dbname = url.path[1:]
         user = url.username
