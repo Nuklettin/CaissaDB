@@ -16,20 +16,27 @@ class LoginForm(FlaskForm):
 
 
 def home_page():
-    today = datetime.today()
-    day_name = today.strftime("%A")
-    return render_template("home.html", day=day_name)
+    return render_template("home.html")
+
+
+def play_page():
+    return render_template("play.html")
 
 
 def leaderboard_page():
-    if request.method == "GET":
-        return render_template("play.html")
-    else:
-        return redirect(url_for("profile_page"))
+    return render_template("leaderboard.html")
+
+
+def admin_page():
+    return render_template("admin.html")
+
+
+def profile_page():
+    return render_template("profile.html")
 
 
 def matches_page():
-    return render_template("movie.html")
+    return render_template("matches.html")
 
 
 def login_page():
@@ -52,10 +59,6 @@ def logout_page():
     logout_user()
     flash("You have logged out.")
     return redirect(url_for("home_page"))
-
-
-def profile_page():
-    return render_template("play.html")
 
 
 def signup_page():
