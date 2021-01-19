@@ -3,7 +3,7 @@ from flask import flash
 from flask_login import UserMixin
 import psycopg2
 import os
-from urllib.parse import urlparse
+import urllib.parse as urlparse
 
 
 class User(UserMixin):
