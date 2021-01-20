@@ -69,28 +69,31 @@ class Database:
             white_player = row[0]
 
         query = "SELECT user_id FROM player WHERE username = '" + black_player + "';"
+        old_black = black_player
+        changed = False
         cur.execute(query)
         record = cur.fetchall()
         for row in record:
             black_player = row[0]
-
-        if time_format == 'blitz':
-            cur.execute("""WITH data AS( INSERT INTO match (white_player, black_player, titled, time_format, pgn) VALUES (%s,%s,%s,%s,%s) RETURNING white_player) 
-                            UPDATE elo SET elo_blitz = elo_blitz + 5 WHERE elo_id = (SELECT * FROM data);""",
-                        (white_player, black_player, is_titled, time_format, pgn))
-        if time_format == 'bullet':
-            cur.execute("""WITH data AS( INSERT INTO match (white_player, black_player, titled, time_format, pgn) VALUES (%s,%s,%s,%s,%s) RETURNING white_player) 
-                            UPDATE elo SET elo_bullet = elo_bullet + 5 WHERE elo_id = (SELECT * FROM data);""",
-                        (white_player, black_player, is_titled, time_format, pgn))
-        if time_format == 'rapid':
-            cur.execute("""WITH data AS( INSERT INTO match (white_player, black_player, titled, time_format, pgn) VALUES (%s,%s,%s,%s,%s) RETURNING white_player) 
-                            UPDATE elo SET elo_rapid = elo_rapid + 5 WHERE elo_id = (SELECT * FROM data);""",
-                        (white_player, black_player, is_titled, time_format, pgn))
-        if time_format == 'classic':
-            cur.execute("""WITH data AS( INSERT INTO match (white_player, black_player, titled, time_format, pgn) VALUES (%s,%s,%s,%s,%s) RETURNING white_player) 
-                            UPDATE elo SET elo_classic = elo_classic + 5 WHERE elo_id = (SELECT * FROM data);""",
-                        (white_player, black_player, is_titled, time_format, pgn))
-
+        if black_player != old_black:
+            changed = True
+        if black_player is not None and white_player is not None and changed == False:
+            if time_format == 'blitz':
+                cur.execute("""WITH data AS( INSERT INTO match (white_player, black_player, titled, time_format, pgn) VALUES (%s,%s,%s,%s,%s) RETURNING white_player) 
+                                UPDATE elo SET elo_blitz = elo_blitz + 5 WHERE elo_id = (SELECT * FROM data);""",
+                            (white_player, black_player, is_titled, time_format, pgn))
+            if time_format == 'bullet':
+                cur.execute("""WITH data AS( INSERT INTO match (white_player, black_player, titled, time_format, pgn) VALUES (%s,%s,%s,%s,%s) RETURNING white_player) 
+                                UPDATE elo SET elo_bullet = elo_bullet + 5 WHERE elo_id = (SELECT * FROM data);""",
+                            (white_player, black_player, is_titled, time_format, pgn))
+            if time_format == 'rapid':
+                cur.execute("""WITH data AS( INSERT INTO match (white_player, black_player, titled, time_format, pgn) VALUES (%s,%s,%s,%s,%s) RETURNING white_player) 
+                                UPDATE elo SET elo_rapid = elo_rapid + 5 WHERE elo_id = (SELECT * FROM data);""",
+                            (white_player, black_player, is_titled, time_format, pgn))
+            if time_format == 'classic':
+                cur.execute("""WITH data AS( INSERT INTO match (white_player, black_player, titled, time_format, pgn) VALUES (%s,%s,%s,%s,%s) RETURNING white_player) 
+                                UPDATE elo SET elo_classic = elo_classic + 5 WHERE elo_id = (SELECT * FROM data);""",
+                            (white_player, black_player, is_titled, time_format, pgn))
         conn.commit()
 
     def delete_player(self, username):
