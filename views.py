@@ -38,12 +38,10 @@ def admin_page():
                 "admin.html"
             )
         username = request.form.data["username"]
-        match_id = request.form.data["match_id"]
         db = Database()
         if username is not None:
             db.delete_player(username)
-        if match_id is not None:
-            db.delete_match(match_id)
+
 
 def profile_page():
     return render_template("profile.html")
