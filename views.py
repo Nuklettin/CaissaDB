@@ -30,12 +30,12 @@ def leaderboard_page():
 def admin_page():
     if request.method == "GET":
         return render_template(
-            "signup.html")
+            "admin.html")
     else:
         valid = validate_form(request.form)
         if not valid:
             return render_template(
-                "signup.html"
+                "admin.html"
             )
         username = request.form.data["username"]
         if username is not None:
