@@ -132,7 +132,7 @@ class Database:
             port=port
         )
         cur = conn.cursor()
-        query = "SELECT elo_" + time_format + ", DENSE_RANK() OVER(ORDER BY elo_" + time_format + " DESC) FROM elo";
+        query = "SELECT elo_" + time_format + ", elo_id, DENSE_RANK() OVER(ORDER BY elo_" + time_format + " DESC) FROM elo";
         cur.execute(query)
         records = cur.fetchall()
         conn.commit()
