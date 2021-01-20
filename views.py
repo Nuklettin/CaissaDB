@@ -23,7 +23,7 @@ def home_page():
 def play_page():
     if request.method == "GET":
         return render_template(
-            "admin.html")
+            "play.html")
     else:
         username = request.form["username"]
         time_format = request.form["time"]
