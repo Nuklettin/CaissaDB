@@ -32,6 +32,11 @@ def admin_page():
         return render_template(
             "admin.html")
     else:
+        valid = validate_form(request.form.data)
+        if not valid:
+            return render_template(
+                "home.html"
+            )
         username = request.form.data["username"]
         if username is not None:
             db = Database()
