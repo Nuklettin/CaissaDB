@@ -29,7 +29,7 @@ def play_page():
         time_format = request.form["time"]
         if username is not None:
             db = Database()
-            db.play_match(current_user, username, time_format, 'placeholderPgn')
+            db.play_match(current_user.username, username, time_format, 'placeholderPgn')
             flash("Played game successfuly")
             return redirect(url_for("play_page"))
 
