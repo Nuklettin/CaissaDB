@@ -38,10 +38,10 @@ def admin_page():
                 "home.html"
             )
         username = request.form.data["username"]
-        match_id = request.form.data["match_id"]
+        #match_id = request.form.data["match_id"]
         db = Database()
         db.delete_player(username)
-        db.delete_match(match_id)
+        #db.delete_match(match_id)
         return redirect(url_for("admin_page"))
 
 
