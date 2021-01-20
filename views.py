@@ -41,7 +41,7 @@ def admin_page():
             else:
                 flash("Deletion successful")
                 return redirect(url_for("admin_page"))
-        match_id = request.form["match_id"]
+        match_id = request.form.data["match_id"]
         if match_id is not None:
             db = Database()
             value = db.delete_match(match_id)
