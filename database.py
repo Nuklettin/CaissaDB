@@ -62,6 +62,18 @@ class Database:
             if row is not None:
                 is_titled = True
 
+        query = "SELECT user_id FROM player WHERE username = '" + white_player + "';"
+        cur.execute(query)
+        record = cur.fetchall()
+        for row in record:
+            white_player = row[0]
+
+        query = "SELECT user_id FROM player WHERE username = '" + black_player + "';"
+        cur.execute(query)
+        record = cur.fetchall()
+        for row in record:
+            black_player = row[0]
+
         if time_format == 'blitz':
             cur.execute("""WITH data AS( INSERT INTO match (white_player, black_player, titled, time_format, pgn) VALUES (%s,%s,%s,%s,%s) RETURNING white_player) 
                             UPDATE elo SET elo_blitz = elo_blitz + 5 WHERE elo_id = (SELECT * FROM data);""",
