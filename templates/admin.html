@@ -7,22 +7,23 @@
     <div class="field">
         <label for="username" class="label">Username</label>
         <div class="control">
-            <input type="text" name="username" class="input"/>
-        </div>
-        <div class="field is-grouped">
-            <div class="control">
-                <button class="button is-primary is-small">Delete Player</button>
-            </div>
+            <input type="text" name="username" class="input" required="required"/>
         </div>
     </div>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul class="flashes">
-        {% for message in messages %}
-        <div class="message_flash" style="color:white">{{ message }}</div>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
+    <div class="field is-grouped">
+        <div class="control">
+            <button class="button is-primary is-small">Delete Player</button>
+        </div>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul class="flashes">
+            {% for message in messages %}
+            <div class="message_flash" style="color:white">{{ message }}</div>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+    </div>
+
 </form>
 {% endblock %}
