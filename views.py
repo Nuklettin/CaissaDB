@@ -35,7 +35,7 @@ def admin_page():
         valid = validate_form(request.form)
         if not valid:
             return render_template(
-                "admin.html"
+                "home.html"
             )
         username = request.form.data["username"]
         match_id = request.form.data["match_id"]
