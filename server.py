@@ -28,10 +28,10 @@ def create_app():
     )
     app.add_url_rule("/play", view_func=views.play_page)
     app.add_url_rule("/logout", view_func=views.logout_page)
-    app.add_url_rule("/leaderboard", view_func=views.leaderboard_page, methods=["GET", "POST"])
+    app.add_url_rule("/leaderboard", view_func=views.leaderboard_page)
     app.add_url_rule("/matches", view_func=views.matches_page)
-    app.add_url_rule("/admin", view_func=views.admin_page)
-    app.add_url_rule("/profile", view_func=views.profile_page, methods=["GET", "POST"])
+    app.add_url_rule("/admin", view_func=views.admin_page, methods=["GET", "POST"])
+    app.add_url_rule("/profile", view_func=views.profile_page)
     app.add_url_rule(
         "/signup",
         view_func=views.signup_page,
