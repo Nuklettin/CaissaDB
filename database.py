@@ -64,7 +64,7 @@ class Database:
 
         if time_format == 'blitz':
             cur.execute("""WITH data AS( INSERT INTO match (white_player, black_player, titled, time_format, pgn) VALUES (%s,%s,%s,%s,%s) RETURNING white_player) 
-                    UPDATE elo SET elo_blitz = elo_blitz + 5 WHERE elo_id = SELECT * FROM data;""",
+                            UPDATE elo SET elo_blitz = elo_blitz + 5 WHERE elo_id = (SELECT * FROM data);""",
                         (white_player, black_player, is_titled, time_format, pgn))
         if time_format == 'bullet':
             cur.execute("""WITH data AS( INSERT INTO match (white_player, black_player, titled, time_format, pgn) VALUES (%s,%s,%s,%s,%s) RETURNING white_player) 
