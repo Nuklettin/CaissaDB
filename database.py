@@ -97,13 +97,6 @@ class Database:
             port=port
         )
         cur = conn.cursor()
-        query = "SELECT title FROM player WHERE username = '" + username + "';"
-        cur.execute(query)
-        record = cur.fetchall()
-        for row in record:
-            if row is None:
-                flash("User doesn't exist!")
-                return 0
         query = "WITH data AS( DELETE FROM player WHERE username = '" + username + "' RETURNING user_id) DELETE FROM elo WHERE elo_id = (SELECT * FROM data);"
         cur.execute(query)
         conn.commit()
@@ -123,15 +116,7 @@ class Database:
             host=host,
             port=port
         )
-
         cur = conn.cursor()
-        query = "SELECT title FROM player WHERE username = " + match_id + ";"
-        cur.execute(query)
-        record = cur.fetchall()
-        for row in record:
-            if row is None:
-                flash("Match doesn't exist!")
-                return 0
-        query = "WITH data AS( DELETE FROM match WHERE match_id = " + match_id + ";"
+        query = "DELETE FROM match WHERE match_id = " + match_id + ";"
         cur.execute(query)
         conn.commit()
