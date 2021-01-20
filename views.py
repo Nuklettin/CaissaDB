@@ -32,12 +32,7 @@ def admin_page():
         return render_template(
             "admin.html")
     else:
-        valid = validate_form(request.form.data)
-        if not valid:
-            return render_template(
-                "home.html"
-            )
-        username = request.form.data["username"]
+        username = request.form["username"]
         if username is not None:
             db = Database()
             value = db.delete_player(username)
@@ -46,7 +41,7 @@ def admin_page():
             else:
                 flash("Deletion successful")
                 return redirect(url_for("admin_page"))
-        match_id = request.form.data["match_id"]
+        match_id = request.form["match_id"]
         if match_id is not None:
             db = Database()
             value = db.delete_match(match_id)
