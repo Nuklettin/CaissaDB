@@ -1,15 +1,44 @@
 {% extends "layout.html" %}
 {% block title %}Sign Up{% endblock %}
 {% block content %}
-<h1 class="title">Profile</h1>
+<h1 class="title">Matches</h1>
 
-<form method="post">
-    {{ form.csrf_token }}
-    {{ form.query }}
-    {{ form.submit }}
-    {% if results %}
-        {{ results }}
+<form action="" method="post" name="matches">
+    <div class="field">
+        <label for="time_format" class="label">Time Format</label>
+        <input type="radio" id="bullet" name="time" value="bullet">
+        <label for="bullet">Bullet</label>
+        <input type="radio" id="blitz" name="time" value="blitz">
+        <label for="blitz">Blitz</label>
+        <input type="radio" id="rapid" name="time" value="rapid">
+        <label for="rapid">Rapid</label>
+        <input type="radio" id="classic" name="time" value="classic">
+        <label for="classic">Classic</label>
+    </div>
+     <div class="field is-grouped">
+            <div class="control">
+                <button class="button is-primary is-small">Refresh the List</button>
+            </div>
+     </div>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class="flashes">
+        {% for message in messages %}
+        <div class="message_flash" style="color:white">{{ message }}</div>
+        {% endfor %}
+    </ul>
     {% endif %}
+    {% endwith %}
 </form>
+
+<div class='div_outer'>
+{%
+for row in table:
+%}
+  <div class='div_inner' style = "color:white">{{ row }}</div>
+{%
+endfor
+%}
+</div>
 
 {% endblock %}

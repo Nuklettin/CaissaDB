@@ -6,7 +6,7 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import DataRequired
 from flask_wtf import FlaskForm
 from passlib.hash import pbkdf2_sha256 as hasher
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, current_user
 from player import get_user
 from movie import Player
 
@@ -16,14 +16,22 @@ class LoginForm(FlaskForm):
     password = PasswordField("Password", validators=[DataRequired()])
 
 
-
-
 def home_page():
     return render_template("home.html")
 
 
 def play_page():
-    return render_template("play.html")
+    if request.method == "GET":
+        return render_template(
+            "admin.html")
+    else:
+        username = request.form["username"]
+        time_format = request.form["time"]
+        if username is not None:
+            db = Database()
+            db.play_match(current_user, username, time_format, 'placeholderPgn')
+            flash("Played game successfuly")
+            return redirect(url_for("play_page"))
 
 
 def leaderboard_page():
@@ -67,7 +75,14 @@ def profile_page():
 
 
 def matches_page():
-    return render_template("matches.html")
+    if request.method == "GET":
+        return render_template(
+            "matches.html")
+    else:
+        time_format = request.form["time"]
+        db = Database()
+        table = db.matches(time_format)
+        return render_template('matches.html', table=table)
 
 
 def login_page():

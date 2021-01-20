@@ -41,9 +41,9 @@
         <i class="icon-remove menu-close"></i>
         {% if current_user.is_authenticated %}
         <a href="{{url_for('play_page')}}" class="smoothScroll">Play</a>
+        <a href="{{url_for('profile_page')}}" class="smoothScroll">Profile</a>
         {% endif %}
         <a href="{{url_for('home_page')}}" class="smoothScroll">Home</a>
-        <a href="{{url_for('profile_page')}}" class="smoothScroll">Profile</a>
         <a href="{{url_for('leaderboard_page')}}" class="smoothScroll">Leaderboard</a>
         <a href="{{url_for('matches_page')}}" class="smoothScroll">Matches</a>
         {% if not current_user.is_authenticated %}
