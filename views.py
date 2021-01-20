@@ -28,7 +28,33 @@ def leaderboard_page():
 
 
 def admin_page():
-    return render_template("admin.html")
+    if request.method == "GET":
+        return render_template(
+            "signup.html")
+    else:
+        valid = validate_form(request.form)
+        if not valid:
+            return render_template(
+                "signup.html"
+            )
+        username = request.form.data["username"]
+        if username is not None:
+            db = Database()
+            value = db.delete_player(username)
+            if value == 0:
+                return redirect(url_for("admin_page"))
+            else:
+                flash("Deletion successful")
+                return redirect(url_for("admin_page"))
+        match_id = request.form.data["match_id"]
+        if match_id is not None:
+            db = Database()
+            value = db.delete_match(match_id)
+            if value == 0:
+                return redirect(url_for("admin_page"))
+            else:
+                flash("Deletion successful")
+                return redirect(url_for("admin_page"))
 
 
 def profile_page():
