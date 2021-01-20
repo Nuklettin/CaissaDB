@@ -4,6 +4,7 @@ from database import Database
 from wtforms import StringField, PasswordField
 from flask_wtf import FlaskForm
 from flask_wtf.file import DataRequired
+from flask_wtf import FlaskForm
 from passlib.hash import pbkdf2_sha256 as hasher
 from flask_login import login_user, logout_user
 from player import get_user
@@ -15,6 +16,8 @@ class LoginForm(FlaskForm):
     password = PasswordField("Password", validators=[DataRequired()])
 
 
+
+
 def home_page():
     return render_template("home.html")
 
@@ -24,7 +27,14 @@ def play_page():
 
 
 def leaderboard_page():
-    return render_template("leaderboard.html")
+    if request.method == "GET":
+        return render_template(
+            "leaderboard.html")
+    else:
+        time_format = request.form["time"]
+        db = Database()
+        table = db.rankings(time_format)
+        return render_template('leaderboard.html', table=table)
 
 
 def admin_page():
@@ -41,15 +51,15 @@ def admin_page():
             else:
                 flash("Deletion successful")
                 return redirect(url_for("admin_page"))
-        match_id = request.form.data["match_id"]
-        if match_id is not None:
-            db = Database()
-            value = db.delete_match(match_id)
-            if value == 0:
-                return redirect(url_for("admin_page"))
-            else:
-                flash("Deletion successful")
-                return redirect(url_for("admin_page"))
+        # match_id = request.form.data["match_id"]
+        # if match_id is not None:
+        #     db = Database()
+        #     value = db.delete_match(match_id)
+        #     if value == 0:
+        #         return redirect(url_for("admin_page"))
+        #     else:
+        #         flash("Deletion successful")
+        #         return redirect(url_for("admin_page"))
 
 
 def profile_page():

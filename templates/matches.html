@@ -1,10 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "layout.html" %}
+{% block title %}Sign Up{% endblock %}
+{% block content %}
+<h1 class="title">Profile</h1>
 
-</body>
-</html>
+<form method="post">
+    {{ form.csrf_token }}
+    {{ form.query }}
+    {{ form.submit }}
+    {% if results %}
+        {{ results }}
+    {% endif %}
+</form>
+
+{% endblock %}

@@ -101,7 +101,8 @@ class Database:
         cur.execute(query)
         conn.commit()
 
-    def delete_match(self, match_id):
+
+    def rankings(self, time_format):
         url = urlparse.urlparse(os.environ['DATABASE_URL'])
         dbname = url.path[1:]
         user = url.username
@@ -117,6 +118,32 @@ class Database:
             port=port
         )
         cur = conn.cursor()
-        query = "DELETE FROM match WHERE match_id = " + match_id + ";"
+        query = "SELECT elo_" + time_format + ", DENSE_RANK() OVER(ORDER BY elo_" + time_format + ") FROM player";
         cur.execute(query)
+        records = cur.fetchall()
         conn.commit()
+        return records
+
+
+
+
+    #
+    # def delete_match(self, match_id):
+    #     url = urlparse.urlparse(os.environ['DATABASE_URL'])
+    #     dbname = url.path[1:]
+    #     user = url.username
+    #     password = url.password
+    #     host = url.hostname
+    #     port = url.port
+    #
+    #     conn = psycopg2.connect(
+    #         dbname=dbname,
+    #         user=user,
+    #         password=password,
+    #         host=host,
+    #         port=port
+    #     )
+    #     cur = conn.cursor()
+    #     query = "DELETE FROM match WHERE match_id = " + match_id + ";"
+    #     cur.execute(query)
+    #     conn.commit()
