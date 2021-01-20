@@ -77,7 +77,7 @@ class Database:
             black_player = row[0]
         if black_player != old_black:
             changed = True
-        if black_player is not None and white_player is not None and changed == False:
+        if black_player is not None and white_player is not None and changed is True:
             if time_format == 'blitz':
                 cur.execute("""WITH data AS( INSERT INTO match (white_player, black_player, titled, time_format, pgn) VALUES (%s,%s,%s,%s,%s) RETURNING white_player) 
                                 UPDATE elo SET elo_blitz = elo_blitz + 5 WHERE elo_id = (SELECT * FROM data);""",
